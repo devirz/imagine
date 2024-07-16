@@ -46,14 +46,15 @@ bot.command("start", async ctx => {
     await ctx.reply("به شما 5 کریت رایگان برای ساخت عکس هدیه داده شد🎉")
   }
 })
-
-let stats: { to?: string | number } = {to: 1}
+type inf = { to?: string }
+let stats: inf = {}
 bot.on(":text", async ctx => {
   const userId = ctx.from?.id
   const user = await User.findOne({userId})
-  const msg = ctx.msg.text
+//  const msg = ctx.msg.text
   if (user?.step === "send_charge") {
     const toUser = ctx.msg.text
+    // @ts-ignore
     status.to = toUser
     const userExists = await User.findOne({userId: toUser})
     if (userExists) {
