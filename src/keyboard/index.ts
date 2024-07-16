@@ -34,7 +34,28 @@ const backMenu = new Menu("back-menu")
     await ctx.editMessageText(`سلام ${firstName} عزیز\nبه ربات پرشین میدجرنی خوش اومدی\nاز طریق ربات میتونی کلی عکسای جذاب با هوش مصنوعی بسازی اونم با کیفیت بالا!\nبرای شروع از دکمه های زیر استفاده کن`)
   })
 
+const backPanel = new Menu("back-panel")
+  .back("بازگشت", async ctx => {
+    const userId = ctx.from.id
+    await User.findOneAndUpdate({ userId }, { step: "null" })
+    await ctx.editMessageText("به پنل مدیریت خوش اومدین")
+  })
+
+const panel = new Menu("panel-admin")
+  .text("شارژ حساب", async ctx => {
+    const userId = ctx.from.id
+    await ctx.editMessageText("لطفا ایدی عددی کاربر موردنظر را ارسال کنید", {
+      reply_markup: backPanel
+    })
+  })
+  .row()
+  .text("امار کاربران")
+  .row()
+  .text("بستن پنل")
+
 export {
   indexMenu,
-  backMenu
+  backMenu,
+  panel,
+  backPanel
 }

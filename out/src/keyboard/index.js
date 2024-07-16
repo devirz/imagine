@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.backMenu = exports.indexMenu = void 0;
+exports.backPanel = exports.panel = exports.backMenu = exports.indexMenu = void 0;
 const menu_1 = require("@grammyjs/menu");
 const User_1 = __importDefault(require("../models/User"));
 const indexMenu = new menu_1.Menu("index-menu")
@@ -49,3 +49,22 @@ const backMenu = new menu_1.Menu("back-menu")
     yield ctx.editMessageText(`سلام ${firstName} عزیز\nبه ربات پرشین میدجرنی خوش اومدی\nاز طریق ربات میتونی کلی عکسای جذاب با هوش مصنوعی بسازی اونم با کیفیت بالا!\nبرای شروع از دکمه های زیر استفاده کن`);
 }));
 exports.backMenu = backMenu;
+const backPanel = new menu_1.Menu("back-panel")
+    .back("بازگشت", (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = ctx.from.id;
+    yield User_1.default.findOneAndUpdate({ userId }, { step: "null" });
+    yield ctx.editMessageText("به پنل مدیریت خوش اومدین");
+}));
+exports.backPanel = backPanel;
+const panel = new menu_1.Menu("panel-admin")
+    .text("شارژ حساب", (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = ctx.from.id;
+    yield ctx.editMessageText("لطفا ایدی عددی کاربر موردنظر را ارسال کنید", {
+        reply_markup: backPanel
+    });
+}))
+    .row()
+    .text("امار کاربران")
+    .row()
+    .text("بستن پنل");
+exports.panel = panel;
