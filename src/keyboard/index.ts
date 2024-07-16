@@ -1,4 +1,4 @@
-import { Menu } from "@grammyjs/menu"
+import {Menu} from "@grammyjs/menu"
 import User from "../models/User"
 
 const indexMenu = new Menu("index-menu")
@@ -7,13 +7,13 @@ const indexMenu = new Menu("index-menu")
     await ctx.editMessageText("لطفا متن خود را ارسال کنید:", {
       reply_markup: backMenu
     })
-    await User.findOneAndUpdate({ userId }, { step: "send_prompt" })
+    await User.findOneAndUpdate({userId}, {step: "send_prompt"})
   })
   .row()
   // .submenu("حساب کاربری👤", "credits-menu")
   .text("حساب کاربری👤", async ctx => {
     const userId = ctx.from.id
-    const user = await User.findOne({ userId })
+    const user = await User.findOne({userId})
     await ctx.editMessageText(`👨🏻مشخصات حساب شما:\nایدی: ${user?.userId}\nنام: ${user?.firstName}\nتعداد کریت: ${user?.charge}\nتاریخ عضویت: ${user?.dateJoined.toLocaleDateString("fa")}`, {
       reply_markup: backMenu
     })
@@ -30,14 +30,14 @@ const backMenu = new Menu("back-menu")
   .back("بازگشت", async ctx => {
     const firstName = ctx.from?.first_name
     const userId = ctx.from.id
-    await User.findOneAndUpdate({ userId }, { step: "null" })
+    await User.findOneAndUpdate({userId}, {step: "null"})
     await ctx.editMessageText(`سلام ${firstName} عزیز\nبه ربات پرشین میدجرنی خوش اومدی\nاز طریق ربات میتونی کلی عکسای جذاب با هوش مصنوعی بسازی اونم با کیفیت بالا!\nبرای شروع از دکمه های زیر استفاده کن`)
   })
 
 const backPanel = new Menu("back-panel")
   .back("بازگشت", async ctx => {
     const userId = ctx.from.id
-    await User.findOneAndUpdate({ userId }, { step: "null" })
+    await User.findOneAndUpdate({userId}, {step: "null"})
     await ctx.editMessageText("به پنل مدیریت خوش اومدین")
   })
 
@@ -47,11 +47,12 @@ const panel = new Menu("panel-admin")
     await ctx.editMessageText("لطفا ایدی عددی کاربر موردنظر را ارسال کنید", {
       reply_markup: backPanel
     })
+    await User.findOneAndUpdate({userId}, {step: "send_charge"})
   })
   .row()
   .text("امار کاربران")
   .row()
-  .text("بستن پنل")
+  .text("بستن پنل", async ctx => await ctx.deleteMessage())
 
 export {
   indexMenu,
